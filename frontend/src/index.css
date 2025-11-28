@@ -14,6 +14,14 @@
   --error-color: #ef4444;
   --warning-color: #f59e0b;
 
+  /* Botones de acción */
+  --edit-color: #8b5cf6;
+  --edit-dark: #7c3aed;
+  --edit-light: #a78bfa;
+  --delete-color: #f43f5e;
+  --delete-dark: #e11d48;
+  --delete-light: #fb7185;
+
   /* Grises */
   --gray-50: #f9fafb;
   --gray-100: #f3f4f6;
@@ -300,36 +308,51 @@ textarea.input-field {
 }
 
 .btn-primary {
-  background: var(--primary-color);
+  background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
   color: white;
+  box-shadow: 0 4px 15px 0 rgba(37, 99, 235, 0.3);
 }
 
 .btn-primary:hover:not(:disabled) {
-  background: var(--primary-dark);
+  background: linear-gradient(135deg, var(--primary-dark) 0%, #1e40af 100%);
   transform: translateY(-2px);
-  box-shadow: var(--shadow-md);
+  box-shadow: 0 6px 20px 0 rgba(37, 99, 235, 0.4);
 }
 
 .btn-secondary {
-  background: var(--gray-500);
+  background: linear-gradient(135deg, var(--gray-500) 0%, var(--gray-600) 100%);
   color: white;
+  box-shadow: 0 4px 15px 0 rgba(107, 114, 128, 0.3);
 }
 
 .btn-secondary:hover:not(:disabled) {
-  background: var(--gray-600);
+  background: linear-gradient(135deg, var(--gray-600) 0%, var(--gray-700) 100%);
   transform: translateY(-2px);
-  box-shadow: var(--shadow-md);
+  box-shadow: 0 6px 20px 0 rgba(107, 114, 128, 0.4);
+}
+
+.btn-edit {
+  background: linear-gradient(135deg, var(--edit-color) 0%, var(--edit-dark) 100%);
+  color: white;
+  box-shadow: 0 4px 15px 0 rgba(139, 92, 246, 0.3);
+}
+
+.btn-edit:hover:not(:disabled) {
+  background: linear-gradient(135deg, var(--edit-dark) 0%, var(--edit-color) 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px 0 rgba(139, 92, 246, 0.4);
 }
 
 .btn-delete {
-  background: var(--error-color);
+  background: linear-gradient(135deg, var(--delete-color) 0%, var(--delete-dark) 100%);
   color: white;
+  box-shadow: 0 4px 15px 0 rgba(244, 63, 94, 0.3);
 }
 
 .btn-delete:hover:not(:disabled) {
-  background: #dc2626;
+  background: linear-gradient(135deg, var(--delete-dark) 0%, var(--delete-color) 100%);
   transform: translateY(-2px);
-  box-shadow: var(--shadow-md);
+  box-shadow: 0 6px 20px 0 rgba(244, 63, 94, 0.4);
 }
 
 .btn-block {
@@ -404,6 +427,14 @@ textarea.input-field {
 .post-card-footer {
   padding-top: 1rem;
   border-top: 1px solid var(--gray-200);
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.post-card-footer .btn {
+  flex: 1;
+  min-width: 120px;
 }
 
 /* ==================== ESTADOS ==================== */

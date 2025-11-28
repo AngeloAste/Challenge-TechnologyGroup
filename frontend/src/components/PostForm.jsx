@@ -1,15 +1,25 @@
-import { useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { createPost } from '../features/postsSlice';
+import { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { createPost, updatePost, clearEditingPost } from '../features/postsSlice';
 
 function PostForm() {
   const dispatch = useDispatch();
+  const editingPost = useSelector((state) => state.posts.editingPost);
   const [formData, setFormData] = useState({
     name: '',
     description: ''
   });
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  useEffect(() => {
+    if (editingPost) {
+      setFormData({
+        name: editingPost.name,
+        description: editingPost.description
+      });
+    }
+  }, [editingPost]);
 
   const validateForm = () => {
     const newErrors = {};
@@ -62,6 +72,12 @@ function PostForm() {
     }, 3000);
   };
 
+  const handleCancel = () => {
+    dispatch(clearEditingPost());
+    setFormData({ name: '', description: '' });
+    setErrors({});
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -72,12 +88,18 @@ function PostForm() {
     setIsSubmitting(true);
 
     try {
-      await dispatch(createPost(formData)).unwrap();
+      if (editingPost) {
+        await dispatch(updatePost({ id: editingPost.id, postData: formData })).unwrap();
+        showNotification('Post actualizado exitosamente', 'success');
+        dispatch(clearEditingPost());
+      } else {
+        await dispatch(createPost(formData)).unwrap();
+        showNotification('Post creado exitosamente', 'success');
+      }
       setFormData({ name: '', description: '' });
       setErrors({});
-      showNotification('Post creado exitosamente', 'success');
     } catch (error) {
-      showNotification('Error al crear el post: ' + error, 'error');
+      showNotification(`Error al ${editingPost ? 'actualizar' : 'crear'} el post: ` + error, 'error');
     } finally {
       setIsSubmitting(false);
     }
@@ -87,8 +109,8 @@ function PostForm() {
     <div className="card">
       <div className="card-header">
         <h2 className="card-title">
-          <span className="icon">✏️</span>
-          Crear Nuevo Post
+          <span className="icon">{editingPost ? '✏️' : '➕'}</span>
+          {editingPost ? 'Editar Post' : 'Crear Nuevo Post'}
         </h2>
       </div>
       <div className="card-body">
@@ -145,23 +167,37 @@ function PostForm() {
             </p>
           </div>
 
-          <button
-            type="submit"
-            className="btn btn-primary btn-block"
-            disabled={isSubmitting}
-          >
-            {isSubmitting ? (
-              <>
-                <span className="spinner-small"></span>
-                Creando...
-              </>
-            ) : (
-              <>
-                <span className="icon-small">➕</span>
-                Crear Post
-              </>
+          <div style={{ display: 'flex', gap: '10px' }}>
+            <button
+              type="submit"
+              className="btn btn-primary"
+              style={{ flex: 1 }}
+              disabled={isSubmitting}
+            >
+              {isSubmitting ? (
+                <>
+                  <span className="spinner-small"></span>
+                  {editingPost ? 'Actualizando...' : 'Creando...'}
+                </>
+              ) : (
+                <>
+                  <span className="icon-small">{editingPost ? '💾' : '➕'}</span>
+                  {editingPost ? 'Actualizar Post' : 'Crear Post'}
+                </>
+              )}
+            </button>
+            {editingPost && (
+              <button
+                type="button"
+                onClick={handleCancel}
+                className="btn btn-secondary"
+                disabled={isSubmitting}
+              >
+                <span className="icon-small">❌</span>
+                Cancelar
+              </button>
             )}
-          </button>
+          </div>
         </form>
       </div>
     </div>

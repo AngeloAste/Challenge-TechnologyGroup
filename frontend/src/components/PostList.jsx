@@ -1,9 +1,14 @@
 import { useDispatch, useSelector } from 'react-redux';
-import { deletePost } from '../features/postsSlice';
+import { deletePost, setEditingPost } from '../features/postsSlice';
 
 function PostList() {
   const dispatch = useDispatch();
   const { filteredItems, status, error } = useSelector((state) => state.posts);
+
+  const handleEdit = (post) => {
+    dispatch(setEditingPost(post));
+    window.scrollTo({ top: document.documentElement.scrollHeight, behavior: 'smooth' });
+  };
 
   const handleDelete = async (id, name) => {
     if (window.confirm(`¿Estás seguro de eliminar el post "${name}"?`)) {
@@ -99,6 +104,13 @@ function PostList() {
                   </p>
                 </div>
                 <div className="post-card-footer">
+                  <button
+                    onClick={() => handleEdit(post)}
+                    className="btn btn-edit"
+                  >
+                    <span className="icon-small">✏️</span>
+                    Editar
+                  </button>
                   <button
                     onClick={() => handleDelete(post.id, post.name)}
                     className="btn btn-delete"

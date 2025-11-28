@@ -46,7 +46,8 @@ const postsSlice = createSlice({
     filteredItems: [],
     filterText: '',
     status: 'idle',
-    error: null
+    error: null,
+    editingPost: null
   },
   reducers: {
     setFilterText: (state, action) => {
@@ -61,6 +62,12 @@ const postsSlice = createSlice({
     },
     clearError: (state) => {
       state.error = null;
+    },
+    setEditingPost: (state, action) => {
+      state.editingPost = action.payload;
+    },
+    clearEditingPost: (state) => {
+      state.editingPost = null;
     }
   },
   extraReducers: (builder) => {
@@ -120,5 +127,5 @@ const postsSlice = createSlice({
   }
 });
 
-export const { setFilterText, clearError } = postsSlice.actions;
+export const { setFilterText, clearError, setEditingPost, clearEditingPost } = postsSlice.actions;
 export default postsSlice.reducer;
