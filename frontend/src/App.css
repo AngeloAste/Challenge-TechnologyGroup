@@ -5,6 +5,11 @@
   max-width: 100%;
 }
 
+.post-form .input-field {
+  width: 100%;
+  min-width: 100%;
+}
+
 /* Animaciones de entrada */
 @keyframes fadeIn {
   from {
